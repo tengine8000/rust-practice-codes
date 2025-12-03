@@ -1,7 +1,23 @@
-
+use std::sync::Mutex;
 
 fn main() {
+    let mu = Mutex::new(10);
+    {
+        println!("Inside block...");
+        let mut val = mu.lock().unwrap();
+        println!("val = {:?}", mu);
+        *val += 1;
+    }
+    println!("Outside block...");
+    println!("val = {:?}", mu);
 
+    let mu = Mutex::new(20);
+    println!("{:?}", mu);
+    let mut val = mu.lock().unwrap();
+    *val += 1;
+    println!("{:?}", mu);
+    std::mem::drop(val);
+    println!("{:?}", mu);
 }
 /*
 Example demonstrating basic multi-threading in Rust.
@@ -76,5 +92,15 @@ fn main() {
     for received_val in rx {
         println!("Received : {}", received_val);
     }
+}
+ // Example demonstrating Mutex for shared state across threads in Rust.
+ use std::sync::Mutex;
+
+fn main() {
+    let mu = Mutex::new(10);
+    let mut val = mu.lock().unwrap();
+    println!("val = {:?}", val);
+    *val += 1;
+    println!("val = {:?}", val);
 }
 */
